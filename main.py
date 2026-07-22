@@ -1,7 +1,19 @@
 from product import Product
 from client import Client
 
-if __name__ == '__main__':
+
+def choose_product(p):
+    product_name_is_valid = False
+    product_to_buy = None
+    while not product_name_is_valid:
+        product_name = input("\nQuel produit le client souhaite acheter ? ")
+        for product in Product.products:
+            if product_name == product.name:
+                product_to_buy = product
+                product_name_is_valid = True
+    return product_to_buy
+
+def init():
     f1 = Product("Clémentine", "Fruit", 2.90, 6, "kg")
     f2 = Product("Datte", "Fruit", 7.00, 4, "kg")
     f3 = Product("Grenade", "Fruit", 3.50, 3, "kg")
@@ -24,9 +36,6 @@ if __name__ == '__main__':
     l9 = Product("Radis noir", "Légume", 5.0, 10, "pièces")
     l10 = Product("Salsifis", "Légume", 2.5, 3, "kg")
 
-    for p in Product.products:
-        print(p)
-
     day_over = False
 
     while not day_over:
@@ -37,7 +46,31 @@ if __name__ == '__main__':
 
         client_actuel = Client(client_first_name, client_last_name)
 
-        client_actuel.add_article(f8, 4)
+        keep_purchasing = True
+        while keep_purchasing:
+
+            for p in Product.products:
+                print(p)
+
+            product_to_buy = choose_product(p)
+
+            quantity = int(input(f"\nquel quantité de {product_to_buy.name} le client souhaite-t-il acheter ?"))
+
+            client_actuel.add_article(product_to_buy, quantity)
+
+            print(f"\nPanier actuel : {client_actuel.purchases}")
+            keep_purchasing = False if input("\nLe client souhaite-t-il acheter un autre article ? (o/n)") == "n" \
+                else True
+
         print(client_actuel)
 
-        day_over = True if input("Voulez-vous continuer la journée ? (appuyez sur Entrée pour continuer, tapez n pour ne pas continuer) : ") == 'n' else False
+        day_over = True if input("Voulez-vous continuer la journée ? (appuyez sur Entrée pour continuer, tapez n pour "
+                                 "ne pas continuer) : ") == 'n' else False
+
+    print("\nFin de la journée\n"
+          f"Stock restant : {Product.products}\n"
+          f"Bilan des achats de la journée : {Client.clients}")
+
+
+if __name__ == '__main__':
+    init()

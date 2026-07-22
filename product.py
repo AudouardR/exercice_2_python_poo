@@ -1,10 +1,6 @@
 class Product:
     products = []
 
-    @classmethod
-    def nb_products(cls):
-        return len(cls.products)
-
     def __init__(self, _name: str, _type: str, _price: float, _quantity: int, _unit: str):
         self._name = _name
         self._type = _type
