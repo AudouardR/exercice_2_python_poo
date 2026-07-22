@@ -1,3 +1,16 @@
+from enum import Enum
+
+
+class ProductType(Enum):
+    FRUIT = "Fruit"
+    VEGETABLE = "Légume"
+
+
+class ProductUnit(Enum):
+    KG = "kg"
+    PIECE = "pièce"
+
+
 class Product:
     products = []
 
@@ -5,7 +18,7 @@ class Product:
     def nb_products(cls):
         return len(cls.products)
 
-    def __init__(self, _name: str, _type: str, _price: float, _quantity: int, _unit: str):
+    def __init__(self, _name: str, _type: ProductType, _price: float, _quantity: int, _unit: ProductUnit):
         """
         :param _name: Nom du produit
         :param _type: Type du produit (Fruit ou légume)
@@ -25,7 +38,7 @@ class Product:
         Affichage du produit
         :return: Attributs du produit sous forme de texte
         """
-        return f"{self._name}: {self._type}, {self._quantity} {self._unit}, {self._price} € / {self._unit}"
+        return f"{self._name}: {self._type.value}, {self._quantity} {self._unit.value}, {self._price} € / {self._unit.value}"
 
     def remove_quantity(self, value):
         """
@@ -33,8 +46,6 @@ class Product:
         :param value: Quantité à retirer du produit
         """
         self._quantity -= value
-        if self._quantity <= 0:
-            Product.products.remove(self)
 
     @property
     def name(self) -> str:
