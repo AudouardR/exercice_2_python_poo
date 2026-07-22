@@ -2,6 +2,24 @@ from product import Product
 
 
 class Client:
+    """
+    Représente un client et ses achats
+
+    Attributs
+    ----------
+    first_name : str
+        Prénom du client
+    last_name : str
+        Nom du client
+    purchases : list
+        Liste des achats effectués par le client
+
+    Méthodes
+    ---------
+    add_article(product, quantitity)
+        Ajoute un article est la quantité achetée à la liste des achats
+
+    """
     clients = []
 
     def __init__(self, first_name: str, last_name: str):
@@ -18,5 +36,4 @@ class Client:
             if product.name in purchase:
                 purchase[product.name] += quantity
                 return
-
         self.purchases.append({product.name: quantity})
