@@ -5,16 +5,19 @@ class Product:
     def nb_products(cls):
         return len(cls.products)
 
-    def __init__(self, _name: str, type: str, price: float, quantity: int, unit: str):
+    def __init__(self, _name: str, _type: str, _price: float, _quantity: int, _unit: str):
         self._name = _name
-        self.type = type
-        self.price = price
-        self.quantity = quantity
-        self.unit = unit
+        self._type = _type
+        self._price = _price
+        self._quantity = _quantity
+        self._unit = _unit
         Product.products.append(self)
 
+    def __repr__(self):
+        return f"{self._name}: {self._type}, {self._quantity} {self._unit}, {self._price} € / {self._unit}"
+
     def remove_quantity(self, value):
-        self.quantity -= value
+        self._quantity -= value
 
     @property
     def name(self) -> str:
