@@ -2,27 +2,32 @@ from product import Product
 from client import Client
 
 
-def choose_product():
+def choose_product(current_client):
     product_to_buy = None
     while product_to_buy is None:
-        product_name = input("\nQuel produit le client souhaite acheter ? ")
+        product_name = input(f"\nQuel produit { current_client.first_name } { current_client.last_name } souhaite acheter ? : ")
         for product in Product.products:
-            if product_name == product.name:
+            if product_name.lower() == product.name.lower():
                 product_to_buy = product
+                return product_to_buy
+        print(f"Le produit {product_name.lower()} n'existe pas")
     return product_to_buy
 
 
-def choose_quantity(product_to_buy: Product | None) -> int:
+def choose_quantity(product_to_buy: Product | None, current_client) -> int:
     quantity_is_valid = False
     quantity = None
     while not quantity_is_valid:
         quantity = input(
-            f"\nquel quantité de {product_to_buy.name} le client souhaite-t-il acheter (en {product_to_buy.unit}) ?")
+            f"\nQuelle quantité (en {product_to_buy.unit}) { current_client.first_name } { current_client.last_name } souhaite acheter ? (Entrez 0 pour annuler l'achat) : ")
         if not quantity.isdigit():
+            print("Saisie invalide : Entrez un nombre entier positif")
             continue
         quantity = int(quantity)
-        if product_to_buy.quantity >= quantity:
-            quantity_is_valid = True
+        if product_to_buy.quantity < quantity:
+            print(f"{ current_client.first_name } { current_client.last_name } ne peut pas acheter {quantity} {product_to_buy.unit} de ce produit (Quantité restante : {product_to_buy.quantity} {product_to_buy.unit})")
+            continue
+        quantity_is_valid = True
     return quantity
 
 
@@ -57,44 +62,52 @@ def work_day():
     while not day_over:
 
         if Product.nb_products() == 0:
-            day_over = True
-            continue
-        print("\nUn client arrive")
+            print("Le magasin n'a rien à vendre.")
+            break
+
+        print("\nUn client arrive\n")
 
         client_first_name = input("Prénom du client : ")
         client_last_name = input("Nom du client : ")
 
-        client_actuel = Client(client_first_name, client_last_name)
+        current_client = Client(client_first_name, client_last_name)
+        print()
 
-        purchasing(client_actuel)
+        purchasing(current_client)
 
-        print(client_actuel)
+        print(current_client)
+
+        if Product.nb_products() == 0:
+            print("Le magasin est en rupture de stock")
+            break
 
         day_over = True if input("Voulez-vous continuer la journée ? (appuyez sur Entrée pour continuer, tapez n pour "
                                  "ne pas continuer) : ") == 'n' else False
 
-    print("\nFin de la journée\n"
-          f"Stock restant : {Product.products}\n"
-          f"Bilan des achats de la journée : {Client.clients}")
+    print("\nFin de la journée\n")
+    print(f"Stock restant : {Product.products}\n")
+    print(f"Bilan des achats de la journée : {Client.clients}")
 
 
-def purchasing(client_actuel: Client):
+def purchasing(current_client: Client):
     keep_purchasing = True
     while keep_purchasing:
-
         for p in Product.products:
             print(p)
 
-        product_to_buy = choose_product()
+        product_to_buy = choose_product(current_client)
 
-        quantity = choose_quantity(product_to_buy)
+        quantity = choose_quantity(product_to_buy, current_client)
 
         if quantity > 0:
-            client_actuel.add_article(product_to_buy, quantity)
+            current_client.add_article(product_to_buy, quantity)
             product_to_buy.remove_quantity(quantity)
 
-        print(f"\nPanier actuel : {client_actuel.purchases}")
-        keep_purchasing = False if input("\nLe client souhaite-t-il acheter un autre article ? (o/n)") == "n" \
+        if Product.nb_products() == 0:
+            break
+
+        print(f"\nPanier actuel : {current_client.purchases}")
+        keep_purchasing = False if input(f"\nEst-ce que { current_client.first_name } { current_client.last_name } souhaite acheter un autre article ? (o/n) : ") == "n" \
             else True
 
 
