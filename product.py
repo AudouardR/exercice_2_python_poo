@@ -1,6 +1,10 @@
 class Product:
     products = []
 
+    @classmethod
+    def nb_products(cls):
+        return len(cls.products)
+
     def __init__(self, _name: str, _type: str, _price: float, _quantity: int, _unit: str):
         """
         :param _name: Nom du produit
@@ -29,6 +33,8 @@ class Product:
         :param value: Quantité à retirer du produit
         """
         self._quantity -= value
+        if self._quantity <= 0:
+            Product.products.remove(self)
 
     @property
     def name(self) -> str:
