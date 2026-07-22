@@ -5,8 +5,8 @@ class Product:
     def nb_products(cls):
         return len(cls.products)
 
-    def __init__(self, name: str, type: str, price: float, quantity: int, unit: str):
-        self.name = name
+    def __init__(self, _name: str, type: str, price: float, quantity: int, unit: str):
+        self._name = _name
         self.type = type
         self.price = price
         self.quantity = quantity
@@ -16,3 +16,6 @@ class Product:
     def remove_quantity(self, value):
         self.quantity -= value
 
+    @property
+    def name(self) -> str:
+        return self._name
