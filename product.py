@@ -18,3 +18,11 @@ class Product:
     @property
     def name(self) -> str:
         return self._name
+
+    @property
+    def quantity(self) -> int:
+        return self._quantity
+
+    @property
+    def unit(self) -> str:
+        return self._unit

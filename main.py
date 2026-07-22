@@ -1,3 +1,5 @@
+from typing import Any
+
 from product import Product
 from client import Client
 
@@ -12,6 +14,20 @@ def choose_product(p):
                 product_to_buy = product
                 product_name_is_valid = True
     return product_to_buy
+
+
+def choose_quantity(product_to_buy: Product | None) -> int:
+    quantity_is_valid = False
+    quantity = None
+    while not quantity_is_valid:
+        quantity = input(f"\nquel quantité de {product_to_buy.name} le client souhaite-t-il acheter (en {product_to_buy.unit}) ?")
+        if not quantity.isdigit():
+            continue
+        quantity = int(quantity)
+        if product_to_buy.quantity >= quantity:
+            quantity_is_valid = True
+    return quantity
+
 
 def init():
     f1 = Product("Clémentine", "Fruit", 2.90, 6, "kg")
@@ -54,9 +70,11 @@ def init():
 
             product_to_buy = choose_product(p)
 
-            quantity = int(input(f"\nquel quantité de {product_to_buy.name} le client souhaite-t-il acheter ?"))
+            quantity = choose_quantity(product_to_buy)
 
-            client_actuel.add_article(product_to_buy, quantity)
+            if quantity > 0:
+                client_actuel.add_article(product_to_buy, quantity)
+                product_to_buy.remove_quantity(quantity)
 
             print(f"\nPanier actuel : {client_actuel.purchases}")
             keep_purchasing = False if input("\nLe client souhaite-t-il acheter un autre article ? (o/n)") == "n" \
