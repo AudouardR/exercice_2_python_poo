@@ -26,3 +26,18 @@ if __name__ == '__main__':
 
     for p in Product.products:
         print(p)
+
+    day_over = False
+
+    while not day_over:
+        print("\nUn client arrive")
+
+        client_first_name = input("Prénom du client : ")
+        client_last_name = input("Nom du client : ")
+
+        client_actuel = Client(client_first_name, client_last_name)
+
+        client_actuel.add_article(f8, 4)
+        print(client_actuel)
+
+        day_over = True if input("Voulez-vous continuer la journée ? (appuyez sur Entrée pour continuer, tapez n pour ne pas continuer) : ") == 'n' else False
