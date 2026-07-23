@@ -15,8 +15,8 @@ class Product:
     products = []
 
     @classmethod
-    def nb_products(cls):
-        return len(cls.products)
+    def nb_products_on_sale(cls):
+        return len(list(filter(lambda x: x.quantity > 0, cls.products)))
 
     def __init__(self, _name: str, _type: ProductType, _price: float, _quantity: int, _unit: ProductUnit):
         """

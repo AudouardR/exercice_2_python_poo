@@ -61,7 +61,7 @@ def work_day():
     day_over = False
     while not day_over:
 
-        if Product.nb_products() == 0:
+        if Product.nb_products_on_sale() == 0:
             print("Le magasin n'a rien à vendre.")
             break
 
@@ -75,13 +75,11 @@ def work_day():
 
         purchasing(current_client)
 
-        print(current_client)
-
-        if Product.nb_products() == 0:
+        if Product.nb_products_on_sale() == 0:
             print("Le magasin est en rupture de stock")
             break
 
-        day_over = True if input("Voulez-vous continuer la journée ? (appuyez sur Entrée pour continuer, tapez n pour "
+        day_over = True if input("\nVoulez-vous continuer la journée ? (appuyez sur Entrée pour continuer, tapez n pour "
                                  "ne pas continuer) : ") == 'n' else False
 
     print("\nFin de la journée\n")
@@ -109,11 +107,11 @@ def purchasing(current_client: Client):
             current_client.add_article(product_to_buy, quantity)
             product_to_buy.remove_quantity(quantity)
 
-        if Product.nb_products() == 0:
+        if Product.nb_products_on_sale() == 0:
             break
 
         print(f"\nPanier actuel : \n{current_client}")
-        keep_purchasing = False if input(f"\nEst-ce que { current_client.first_name } { current_client.last_name } souhaite acheter un autre article ? (o/n) : ") == "n" \
+        keep_purchasing = False if input(f"\nEst-ce que { current_client.first_name } { current_client.last_name } souhaite acheter un autre article ? (Entrée: oui, 'n': non) : ") == "n" \
             else True
 
 
