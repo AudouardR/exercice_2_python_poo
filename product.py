@@ -55,6 +55,13 @@ class Product:
         return self._name
 
     @property
+    def price(self) -> float:
+        """
+        :return: Prix du produit
+        """
+        return self._price
+
+    @property
     def quantity(self) -> int:
         """
         :return: Quantité du produit

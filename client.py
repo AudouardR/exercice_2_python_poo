@@ -11,7 +11,7 @@ class Client:
         Prénom du client
     last_name : str
         Nom du client
-    purchases : list
+    purchases : dict[Product, int]
         Liste des achats effectués par le client
 
     Méthodes
@@ -22,18 +22,28 @@ class Client:
     """
     clients = []
 
+    @classmethod
+    def total_revenue(cls):
+        return sum(client.cart_price() for client in cls.clients)
+
     def __init__(self, first_name: str, last_name: str):
         self.first_name = first_name
         self.last_name = last_name
-        self.purchases: list[dict[str, int]] = []
+        self.purchases: dict[Product, int] = {}
         self.clients.append(self)
 
     def __repr__(self):
-        return self.first_name + " " + self.last_name + " : Achats : " + str(self.purchases)
+        display = self.first_name + " " + self.last_name + " : \n"
+        for key, value in self.purchases.items():
+            display += key.name + ": " + str(value) + " " + key.unit.value + " (" + str(key.price * value) + " €)" + "\n"
+        display += "Total : " + str(self.cart_price()) + " €\n"
+        return display
 
     def add_article(self, product: Product, quantity: int):
-        for purchase in self.purchases:
-            if product.name in purchase:
-                purchase[product.name] += quantity
-                return
-        self.purchases.append({product.name: quantity})
+        if product in self.purchases:
+            self.purchases[product] += quantity
+            return
+        self.purchases[product] = quantity
+
+    def cart_price(self) -> float:
+        return sum(value * key.price for key, value in self.purchases.items())
